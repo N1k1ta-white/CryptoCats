@@ -1,6 +1,12 @@
 import { Component, Inject, inject, OnInit } from '@angular/core';
-import { TelegramService } from '../../services/telegram.service';
-import { DOCUMENT } from '@angular/common';
+import { Telegram } from '@twa-dev/types';
+
+declare global {
+  interface Window {
+    Telegram: any;
+  }
+}
+
 
 @Component({
   selector: 'app-main',
@@ -13,17 +19,20 @@ export class MainComponent implements OnInit {
 
   // constructor(private telegramService : TelegramService) {
   // }
-  private window;
-  public info : any;
+  // private window;
+  // public info : any;
 
-  constructor(@Inject(DOCUMENT) private win : any) {
-    this.window = win;
-  }
+  // constructor(@Inject(DOCUMENT) private win : any) {
+  //   this.window = win;
+  // }
 
   ngOnInit(): void {
-    console.log("HI");
-    let info = this.window.Telegram?.WebApp?.OnInit;
-    console.log(info);
+    console.log(window?.Telegram?.WebApp?.initDataUnsafe);
+
+
+    // console.log("HI");
+    // let info = this.window.Telegram;
+    // console.log(info);
       // let info = window.Telegram.init()q
       // console.log(info);
   }

@@ -1,12 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { Telegram } from '@twa-dev/types';
 
-declare global {
-  interface Window {
-    Telegram: Telegram;
-  }
-}
 
 @Injectable({
   providedIn: 'root'
