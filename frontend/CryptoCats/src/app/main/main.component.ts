@@ -1,5 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { TelegramWebappService } from '@zakarliuka/ng-telegram-webapp';
+import { Component, Inject, inject, OnInit } from '@angular/core';
+import { TelegramService } from '../../services/telegram.service';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-main',
@@ -9,10 +10,21 @@ import { TelegramWebappService } from '@zakarliuka/ng-telegram-webapp';
   styleUrl: './main.component.css'
 })
 export class MainComponent implements OnInit {
-  readonly telegramService = inject(TelegramWebappService)
+
+  // constructor(private telegramService : TelegramService) {
+  // }
+  private window;
+  public info : any;
+
+  constructor(@Inject(DOCUMENT) private win : any) {
+    this.window = win;
+  }
 
   ngOnInit(): void {
-      let info = this.telegramService.initData;
-      console.log(info);
+    console.log("HI");
+    let info = this.window.Telegram?.WebApp?.OnInit;
+    console.log(info);
+      // let info = window.Telegram.init()q
+      // console.log(info);
   }
 }
