@@ -1,1 +1,18 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-color: white;
+    --secondary-color: black;
+    --accept-color: #04BA00;
+}
+
+*, html {
+    /*background-color: var(--primary-color);*/
+    font-family: Pixelify Sans;
+    margin: 0;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+body {
+  background-image: url("assets/pattern.png");
+}

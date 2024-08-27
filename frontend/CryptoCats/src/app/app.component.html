@@ -1,2 +1,4 @@
-<p>Hello there!</p>
-<router-outlet></router-outlet>
+@if (isLoading$ | async) {
+    <app-loader></app-loader>
+}
+<router-outlet></router-outlet> 
