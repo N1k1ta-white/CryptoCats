@@ -1,6 +1,23 @@
-<p>Data: <br> {{info}}</p>
-<button>My collection</button>
-<button>Open egg timestamp</button>
-<button>Friends</button>
-<button>Challenges</button>
-<button>Byu eggs</button>
+<body>
+    <h1 class="nickname">{{name$ | async}}</h1>
+    <div class="score">
+        <img src="http://localhost:8080/static/Coin.png" style="height: 40px;width: 40px;" alt="">
+        <p>{{coins$ | async}}</p>
+    </div>
+    <!-- <img src="{{img}}">
+    <p>IMG: {{img}}</p>
+    <p>Data: {{info}}</p> -->
+    <div class="buttons">
+        <button class="button" [routerLink]="['/collection']">My collection</button>
+        @if (time$ | async; as time) {
+            @if (time > 0) {
+                <button class="button" >Open egg {{timestampToTime(time)}}</button>
+            } @else {
+                <button class="button button-ready" (click)="openEgg()" >Open egg 🎁</button>
+            }
+        }
+        <button class="button">Friends</button>
+        <button class="button" routerLink="/challenges">Challenges</button>
+        <button class="button">Byu eggs</button>
+    </div>
+</body>
