@@ -10,12 +10,16 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class LoaderComponent {
     private load = new BehaviorSubject<boolean>(true);
-    
+
     isLoading() : Observable<boolean> {
       return this.load.asObservable();
     }
 
     setValue(val : boolean) : void {
-      this.load.next(val);
+      if (!val) {
+        setTimeout(() => {this.load.next(val);}, 500);
+      } else {
+        this.load.next(val);
+      }
     }
 }

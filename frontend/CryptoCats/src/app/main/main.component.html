@@ -1,23 +1,25 @@
 <body>
-    <h1 class="nickname">{{name$ | async}}</h1>
+
+  <header>
+    <h2 class="nickname">{{name$ | async}}</h2>
+    <button class="collection" routerLink="collection">Collection</button>
+  </header>
+  <main>
     <div class="score">
-        <img src="http://localhost:8080/static/Coin.png" style="height: 40px;width: 40px;" alt="">
-        <p>{{coins$ | async}}</p>
+        <div class="crypto coin">
+          <img src="http://localhost:8080/static/CryptoCoin.png" style="height: 40px;width: auto;" alt="">
+          <p>{{coins$ | async}}</p>
+        </div>
+        <div class="meme coin">
+          <img src="http://localhost:8080/static/MemeCoin.png" style="height: 25px;width: auto;" alt="">
+          <p>{{coins$ | async}}</p>
+        </div>
     </div>
-    <!-- <img src="{{img}}">
-    <p>IMG: {{img}}</p>
-    <p>Data: {{info}}</p> -->
-    <div class="buttons">
-        <button class="button" [routerLink]="['/collection']">My collection</button>
-        @if (time$ | async; as time) {
-            @if (time > 0) {
-                <button class="button" >Open egg {{timestampToTime(time)}}</button>
-            } @else {
-                <button class="button button-ready" (click)="openEgg()" >Open egg 🎁</button>
-            }
-        }
-        <button class="button">Friends</button>
-        <button class="button" routerLink="/challenges">Challenges</button>
-        <button class="button">Byu eggs</button>
+    <div class="egg">
+      <img [ngClass]="{inactive : isClosed()}" ngSrc="http://localhost:8080/static/CryptoCatEgg.png" alt="" fill>
+      <button [ngClass]="{closed : isClosed(), open : !isClosed()}" [disabled]="isClosed()">{{buttonState$.value}}</button>
+      <p>{{timestampToTime(time$ | async)}}</p>
     </div>
+  </main>
+
 </body>

@@ -1,18 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
     --primary-color: white;
-    --secondary-color: black;
+    --secondary-color: white;
     --accept-color: #04BA00;
+    --icon-color: white;
 }
 
 *, html {
-    /*background-color: var(--primary-color);*/
-    font-family: Pixelify Sans;
-    margin: 0;
-    margin-left: 5px;
-    margin-right: 5px;
+    font-family: Montserrat, sans-serif;
+    border: none;
 }
 
 body {
-  background-image: url("assets/pattern.png");
+  color: white;
+  /*background-image: url("assets/pattern.png");*/
+  background-color: #28002E;
+  margin: 0;
+  padding: 0;
 }

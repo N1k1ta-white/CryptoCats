@@ -4,22 +4,23 @@ import { TelegramService } from './services/telegram.service';
 import { DataService } from './services/data.service';
 import { UserService } from './services/user.service';
 import { ThemeService } from './services/theme.service';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { User } from './entity/user.entity';
 import { LoaderComponent } from './loader/loader.component';
 import { CommonModule } from '@angular/common';
+import {FooterComponent} from "./footer/footer.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, LoaderComponent],
+  imports: [RouterOutlet, CommonModule, LoaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
 
   public isLoading$ : Observable<boolean>;
-  
+
   constructor(private telegramService: TelegramService,
               private dataService: DataService,
               private userService: UserService,
@@ -44,7 +45,7 @@ export class AppComponent implements OnInit {
           this.dataService.setTime(openTime - Math.floor(Date.now() / 1000));
           this.loader.setValue(false);
       },
-      complete: () =>  { 
+      complete: () =>  {
         console.log("Got a token")
       },
       error: () => console.log("Oh shit"),

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,8 +7,8 @@ import { BehaviorSubject, Observable, Subject } from 'rxjs';
 export class DataService {
 
   private name = new BehaviorSubject<string>("null");
-  private coins = new BehaviorSubject<number>(0); 
-  private time = new BehaviorSubject<number>(0);
+  private coins = new BehaviorSubject<number>(0);
+  private time = new BehaviorSubject<number>(5);
   private interval: any;
 
     constructor() {
@@ -17,9 +17,9 @@ export class DataService {
       }
       this.interval = setInterval(() => {
         const time = this.time.getValue();
-        // if (time >= 0) {
+        if (time > 0) {
           this.time.next(time - 1);
-        // }
+        }
       }, 1000)
     }
 
@@ -51,15 +51,15 @@ export class DataService {
     setCoins(coins : number) {
       this.coins.next(coins);
     }
-  
+
     saveUserData(data: any) {
       sessionStorage.setItem("data", JSON.stringify(data));
     }
-  
+
     getUserData() {
       return sessionStorage.getItem("data");
     }
-  
+
     eraseUserData() {
       sessionStorage.removeItem("data");
     }

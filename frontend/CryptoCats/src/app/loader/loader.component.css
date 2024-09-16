@@ -1,46 +1,25 @@
-.loader{
-  width: 40px;
-  aspect-ratio: 1;
-  --c:no-repeat linear-gradient(var(--secondary-color) 0 0);
-  background: 
-    var(--c) 0    0,
-    var(--c) 0    100%, 
-    var(--c) 50%  0,  
-    var(--c) 50%  100%, 
-    var(--c) 100% 0, 
-    var(--c) 100% 100%;
-  background-size: 8px 50%;
-  animation: l7-0 1s infinite;
+.loader {
+  width: 65px;
+  height: 30px;
   position: relative;
-  overflow: hidden;
 }
 .loader:before {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--secondary-color);
-  top: calc(50% - 4px);
-  left: -8px;
-  animation: inherit;
-  animation-name: l7-1;
+  border-radius: 50px;
+  box-shadow: 0 0 0 3px inset #fff;
+  animation: l3 0.75s infinite alternate;
 }
-
-@keyframes l7-0 {
- 16.67% {background-size:8px 30%, 8px 30%, 8px 50%, 8px 50%, 8px 50%, 8px 50%}
- 33.33% {background-size:8px 30%, 8px 30%, 8px 30%, 8px 30%, 8px 50%, 8px 50%}
- 50%    {background-size:8px 30%, 8px 30%, 8px 30%, 8px 30%, 8px 30%, 8px 30%}
- 66.67% {background-size:8px 50%, 8px 50%, 8px 30%, 8px 30%, 8px 30%, 8px 30%}
- 83.33% {background-size:8px 50%, 8px 50%, 8px 50%, 8px 50%, 8px 30%, 8px 30%}
-}
-
-@keyframes l7-1 {
- 20%  {left:0px}
- 40%  {left:calc(50%  - 4px)}
- 60%  {left:calc(100% - 8px)}
- 80%,
- 100% {left:100%}
+@keyframes l3 {
+  0% {
+    inset: 0 35px 0 0;
+  }
+  50% {
+    inset: 0 0 0 0;
+  }
+  100% {
+    inset: 0 0 0 35px;
+  }
 }
 
 .overlay {
@@ -49,9 +28,9 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background:var(--primary-color); /* Полупрозрачный черный фон */
+  background:black;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000; /* Убедитесь, что z-index больше всех других элементов */
+  z-index: 1000;
 }

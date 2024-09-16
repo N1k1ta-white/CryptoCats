@@ -1,26 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TelegramService } from '../services/telegram.service';
 import { UserService } from '../services/user.service';
 import { DataService } from '../services/data.service';
 import { AppComponent } from '../app.component';
-import { delay, Observable, of } from 'rxjs';
-import { CommonModule } from '@angular/common';
-import { LoaderComponent } from '../loader/loader.component';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { GameService } from '../services/game.service';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, NgOptimizedImage],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
-export class MainComponent implements OnInit {
-  public img : string = "";
+export class MainComponent {
   public name$ : Observable<string>;
   public coins$ : Observable<number>;
   public time$ : Observable<number>;
+  public buttonState$ : BehaviorSubject<string>;
+
+  readonly states = ["Open Egg", "Closed"];
+  readonly open = 0;
+  readonly close = 1;
 
   constructor(private telegramService: TelegramService,
             private userService: UserService,
@@ -31,10 +34,16 @@ export class MainComponent implements OnInit {
             this.name$ = dataService.getName();
             this.coins$ = dataService.getCoins();
             this.time$ = dataService.getTime();
-  }
+            this.buttonState$ = new BehaviorSubject(this.states[this.close]);
 
-  ngOnInit(): void {
-    console.log(this.img);
+            this.time$.subscribe(value => {
+              if (value === 0 && this.buttonState$.value != this.states[this.open]) {
+                this.buttonState$.next(this.states[this.open]);
+              } else if (value !== 0 && this.buttonState$.value != this.states[this.close]) {
+                this.buttonState$.next(this.states[this.close]);
+              }
+            })
+
   }
 
   test(): void {
@@ -52,12 +61,15 @@ export class MainComponent implements OnInit {
   }
 
   openEgg() {
-    this.gameService.openEgg("sometinh").subscribe({
+    this.gameService.openEgg("something").subscribe({
       complete: () => console.log("OK"),
       error: () => console.log("err"),
     });
   }
 
+  isClosed() : boolean {
+    return this.buttonState$.value == this.states[this.close];
+  }
 
   // TODO: more efficient
   protected timestampToTime(timestamp : number | null) {

@@ -18,25 +18,108 @@
     background-color: var(--accept-color);
 }
 
-.score img {
-    width: 100px;
-    height: 100px;
-}
-
 .score {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 120px;
-    margin-bottom: 120px;
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
-body {
-    color: var(--secondary-color);
-    display: flex;
-    flex-direction: column;
-    height: 95%;
-    width: 100%;
+.coin {
+  display: flex;
+  align-items: center;
+}
+
+.coin > p {
+  margin: 0.2rem 0.5rem;
+}
+
+.meme {
+  font-size: 20px;
+  opacity: 0.6;
+}
+
+.collection {
+  cursor: pointer;
+  font-weight: 700;
+  background-color: #D4CC00;
+  color: black;
+  font-size: 1.5rem;
+  border-radius: 15px;
+  padding: 0.2rem 0.5rem;
+}
+
+header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 1rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.inactive {
+  opacity: 0.7;
+  width: 97% !important;
+}
+
+.egg {
+  width: 40vh;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.egg img {
+  position: static !important;
+  align-self: center;
+  width: 100%;
+  min-width: 200px;
+  transition: linear 0.8s;
+}
+
+.egg button {
+  width: 75%;
+  min-width: 175px;
+  height: 4.5rem;
+  font-weight: 600;
+  font-size: 1.75rem;
+  align-self: center;
+  position: relative;
+  bottom: 6rem;
+  border-radius: 20px;
+  transition: all linear 0.5s;
+}
+
+.egg button:hover {
+  cursor: pointer;
+}
+
+.closed {
+  color: #D4CC00;
+  background-color: #990000;
+  box-shadow: inset 0 0 8px 1px rgba(0,0,0,0.65);
+  border: #D4CC00 4px solid;
+}
+
+.open {
+  background-color: #D4CC00;
+  color: #990000;
+  text-shadow: 1px 2px 2px rgba(0, 0, 0, 0.6);
+  border: #990000 4px solid;
+}
+
+.egg p {
+  align-self: center;
+  position: relative;
+  bottom: 7rem;
+  font-size: 1.5rem;
 }
