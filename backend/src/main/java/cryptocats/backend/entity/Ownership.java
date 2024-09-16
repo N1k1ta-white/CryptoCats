@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,4 +38,6 @@ public class Ownership {
     private User user;
 
     private Long amount;
+
+    private Instant firstReceivedAt;
 }

@@ -1,6 +1,5 @@
 package cryptocats.backend.config;
 
-import cryptocats.backend.exception.NoAuthCookieException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -8,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,45 +28,61 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
 
+    @Value("${cookie.token.name}")
+    private String cookieName;
+
+    private void authenticateUser(@NotNull HttpServletRequest request, UserDetails userDetails) {
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+
+        authentication.setDetails(
+                new WebAuthenticationDetailsSource().buildDetails(request)
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    private Optional<Cookie> getAuthCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies != null) {
+            return Arrays.stream(cookies)
+                    .filter(cookie -> cookie.getName().equals(cookieName))
+                    .findAny();
+        }
+
+        return Optional.empty();
+    }
+
     @Override
     protected void doFilterInternal(@NotNull HttpServletRequest request,
                                     @NotNull HttpServletResponse response,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {
-//        final String identity = request.getHeader("Identity");
-        Optional<Cookie> authCookie = Optional.empty();
-        if (request.getCookies() != null) {
-            authCookie = Arrays.stream(request.getCookies())
-                    .filter(cookie -> cookie.getName().equals("CryptoCatToken"))
-                    .findAny();
-        }
-//        if (authCookie.isEmpty() || identity == null ||  identity.isEmpty()) {
+        Optional<Cookie> authCookie = getAuthCookie(request);
+
         if (authCookie.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
+
         String jwt = authCookie.get().getValue();
-        if (jwt == null || jwt.isEmpty()) {
+        if (jwt.isBlank()) {
             filterChain.doFilter(request, response);
             return;
         }
-        String id = jwtService.extractUsername(jwt);
-//        if (id != null && id.equals(identity) && SecurityContextHolder.getContext().getAuthentication() == null) {
-        if (id != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(id);
+
+        String username = jwtService.extractUsername(jwt);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             if (jwtService.tokenValidator(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(
-                                userDetails,
-                                null,
-                                userDetails.getAuthorities()
-                        );
-                authentication.setDetails(
-                        new WebAuthenticationDetailsSource()
-                                .buildDetails(request)
-                );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                authenticateUser(request, userDetails);
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

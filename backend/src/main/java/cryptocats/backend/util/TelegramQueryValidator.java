@@ -2,38 +2,32 @@ package cryptocats.backend.util;
 
 import cryptocats.backend.exception.ExpiredAuthDateException;
 import cryptocats.backend.exception.NoParamInQueryException;
-import lombok.extern.java.Log;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.codec.Hex;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @Component
-@Log
 public class TelegramQueryValidator {
+
+    // TODO: algorithm depends on that variable
     @Value("${telegram.signature.algorithm}")
-    private String ALGORITHM;
+    private String algorithm;
 
     @Value("${telegram.bot.token}")
-    private String BotToken;
+    private String botToken;
 
     @Value("${telegram.signature.key}")
     private String key;
 
     private static final String SEPARATOR = "&";
     private static final String DELIMITER = "\n";
-    private static final String START = "hash=";
+    private static final String HASH = "hash=";
     private static final String AUTH_DATE = "auth_date=";
 
     private static final Long INTERVAL = (long) (60 * 60 * 4);
@@ -42,8 +36,9 @@ public class TelegramQueryValidator {
         return Instant.now().getEpochSecond();
     }
 
-    public boolean validate(String query) throws NoSuchAlgorithmException, NoParamInQueryException, InvalidKeyException,
-            ExpiredAuthDateException {
+    // TODO: Clean up code!!!
+    // TODO: Improve algorithm of search
+    public boolean validate(String query) throws NoParamInQueryException, ExpiredAuthDateException {
         String[] params = query.split(SEPARATOR);
 
         long authDate = Long.parseLong(Arrays.stream(params)
@@ -57,16 +52,17 @@ public class TelegramQueryValidator {
         }
 
         String hash = Arrays.stream(params)
-                .filter(param -> param.startsWith(START))
+                .filter(param -> param.startsWith(HASH))
                 .findFirst()
                 .orElseThrow(() -> new NoParamInQueryException("No hash in the query"))
-                .substring(START.length());
+                .substring(HASH.length());
+
         String dataCheckString = Arrays.stream(params)
                 .filter(string -> !string.startsWith("hash="))
                 .sorted(Comparator.naturalOrder())
                 .collect(Collectors.joining(DELIMITER));
 
-        byte[] hmacSecret = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, key).hmac(BotToken);
+        byte[] hmacSecret = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, key).hmac(botToken);
         String calculatedHash = new HmacUtils(HmacAlgorithms.HMAC_SHA_256, hmacSecret).hmacHex(dataCheckString);
 
         return calculatedHash.equals(hash);

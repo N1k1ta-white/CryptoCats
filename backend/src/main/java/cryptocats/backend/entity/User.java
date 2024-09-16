@@ -3,7 +3,6 @@ package cryptocats.backend.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,9 +13,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -26,16 +25,13 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-
-    //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
     @Id
     private Long id;
     @Column(nullable = false)
     private Long capital;
-    private Long invited_by;
+    private Long invitedBy;
     @Column(nullable = false)
-    private Long lastOpenedTime;
+    private Instant lastOpenedTime;
 
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
@@ -44,7 +40,7 @@ public class User implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO: Roles
+        // TODO: Roles?
         return List.of(new SimpleGrantedAuthority("ROLE_" + "PLAYER"));
     }
 

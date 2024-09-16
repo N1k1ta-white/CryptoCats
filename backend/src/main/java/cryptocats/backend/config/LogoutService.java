@@ -1,6 +1,5 @@
 package cryptocats.backend.config;
 
-import cryptocats.backend.config.JwtService;
 import cryptocats.backend.util.CookieCreator;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,7 +7,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -45,7 +43,7 @@ public class LogoutService implements LogoutHandler {
         if (jwt == null || jwt.isEmpty()) {
             return;
         }
-        response.addCookie(cookieCreator.createCookieToken(null));
+        response.addCookie(cookieCreator.createCookieWithJwtToken(null));
         SecurityContextHolder.clearContext();
     }
 }

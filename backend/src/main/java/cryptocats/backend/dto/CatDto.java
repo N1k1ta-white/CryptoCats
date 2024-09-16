@@ -13,10 +13,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Builder
 public class CatDto {
-    @NotNull
     private Long id;
     @NotNull
     private Long cost;
+    @NotNull
+    private String name;
     @NotNull
     private String img;
 }

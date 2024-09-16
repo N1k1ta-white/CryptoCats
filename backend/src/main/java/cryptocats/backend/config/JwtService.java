@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +20,20 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-    private static final long JWT_TERM = 1000 * 60 * 60 * 2;
+    @Value("${jwt.term}")
+    private long jwtTerm;
 
     @Value("${jwt.secretKey}")
     private String secretKey;
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        String username = extractClaim(token, Claims::getSubject);
+
+        if (username == null || username.isEmpty()) {
+            throw new BadCredentialsException("Invalid username in token");
+        }
+
+        return username;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -41,15 +49,17 @@ public class JwtService {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + JWT_TERM))
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + jwtTerm))
                 .signWith(getSignInKey())
                 .compact();
     }
 
     public boolean tokenValidator(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+        final String actualUsername = userDetails.getUsername();
+
+        return username.equals(actualUsername) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {

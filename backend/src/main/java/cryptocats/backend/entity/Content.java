@@ -1,6 +1,7 @@
 package cryptocats.backend.entity;
 
 import cryptocats.backend.entity.embedded.ContentId;
+import cryptocats.backend.entity.interfaces.Searchable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,7 +23,7 @@ import lombok.Setter;
 @Builder
 @Entity
 @Table(name = "content")
-public class Content {
+public class Content implements Searchable {
     @EmbeddedId
     private ContentId id;
 
@@ -36,4 +38,12 @@ public class Content {
     private Cat cat;
 
     private Long chance;
+
+    @Transient
+    private long conclusiveProbability;
+
+    @Override
+    public long getMetric() {
+        return conclusiveProbability;
+    }
 }

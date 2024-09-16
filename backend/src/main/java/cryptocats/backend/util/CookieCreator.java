@@ -32,7 +32,7 @@ public class CookieCreator {
         return cookie;
     }
 
-    public Cookie createCookieToken(String token) {
+    public Cookie createCookieWithJwtToken(String token) {
         Map<String, String> attributes = new HashMap<>();
         attributes.put("Partitioned", "");
         attributes.put("SameSite", "None");

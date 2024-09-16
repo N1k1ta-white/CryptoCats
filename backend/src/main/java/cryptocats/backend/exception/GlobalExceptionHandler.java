@@ -16,7 +16,8 @@ public class GlobalExceptionHandler {
     @Data
     @AllArgsConstructor
     public static class ErrorResponse {
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss dd.MM.yyyy")
+
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "${error.date.pattern}")
         private LocalDateTime timestamp;
         private String error;
         private String message;
@@ -24,25 +25,36 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler({ExpiredAuthDateException.class})
     public ResponseEntity<ErrorResponse> handleExpiredAuthDateException(ExpiredAuthDateException ex) {
-        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(),
-                ex.getMessage()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(
+                new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(), ex.getMessage()),
+                HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({NoParamInQueryException.class})
     public ResponseEntity<ErrorResponse> handleNoParamInQueryException(NoParamInQueryException ex) {
-        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(),
-                ex.getMessage()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(
+                new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(), ex.getMessage()),
+                HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({NotValidQueryException.class})
     public ResponseEntity<ErrorResponse> handleNotValidQueryException(NotValidQueryException ex) {
-        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(),
-                ex.getMessage()), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(
+                new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(), ex.getMessage()),
+                HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({UserAlreadyExistsException.class})
     public ResponseEntity<ErrorResponse> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
-        return new ResponseEntity<>(new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(),
-                ex.getMessage()), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(
+                new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(), ex.getMessage()),
+                HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({NotFoundEntityException.class})
+    public ResponseEntity<ErrorResponse> handleEggNotFoundException(NotFoundEntityException ex) {
+        return new ResponseEntity<>(
+                new ErrorResponse(LocalDateTime.now(), ex.getClass().getSimpleName(), ex.getMessage()),
+                HttpStatus.NOT_FOUND);
     }
 }
