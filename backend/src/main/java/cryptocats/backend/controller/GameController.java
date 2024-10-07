@@ -49,7 +49,7 @@ public class GameController {
         List<Content> contents = egg.getContentList();
         Content prize = (Content) Searcher.findSearchable(contents, generatedNumber);
 
-        userService.giveCatToUser(user, prize.getCat());
+        userService.addCatToUser(user, prize.getCat());
         CatDto prizeCat =  catMapper.catToDto(prize.getCat());
 
         return ResponseEntity.ok(prizeCat);

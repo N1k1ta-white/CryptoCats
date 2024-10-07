@@ -9,12 +9,12 @@
 *, html {
     font-family: Montserrat, sans-serif;
     border: none;
+    margin: 0;
+    padding: 0;
 }
 
 body {
   color: white;
   /*background-image: url("assets/pattern.png");*/
   background-color: #28002E;
-  margin: 0;
-  padding: 0;
 }

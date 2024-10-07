@@ -25,7 +25,7 @@ public class UserService {
     private OwnershipService ownershipService;
     private static final int INCREMENT_BY = 1;
 
-    public Optional<User> authUser(User user, String query) {
+    public Optional<User> authorizeUser(User user, String query) {
         if (validator.validate(query)) {
             return userRepository.findById(user.getId());
         }
@@ -48,7 +48,7 @@ public class UserService {
         return userRepository.findByInvitedBy(ownerId, pageable);
     }
 
-    public void giveCatToUser(User user, Cat cat) {
+    public void addCatToUser(User user, Cat cat) {
         OwnershipId ownershipId = new OwnershipId(user.getId(), cat.getId());
         Ownership ownership = ownershipService.findOwnershipByOwnershipId(ownershipId)
                 .or(() -> Optional.of(new Ownership(ownershipId, cat, user, 0L, Instant.now())))

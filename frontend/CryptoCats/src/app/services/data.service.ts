@@ -8,13 +8,14 @@ export class DataService {
 
   private name = new BehaviorSubject<string>("null");
   private coins = new BehaviorSubject<number>(0);
-  private time = new BehaviorSubject<number>(5);
+  private time = new BehaviorSubject<number>(0);
   private interval: any;
 
     constructor() {
       if (typeof this.getNameStorage() === 'string') {
         this.name.next(this.getNameStorage() ?? "null");
       }
+
       this.interval = setInterval(() => {
         const time = this.time.getValue();
         if (time > 0) {
@@ -45,7 +46,7 @@ export class DataService {
     }
 
     setTime(timestamp: number) {
-      this.time.next(timestamp);
+      this.time.next((timestamp < 0 ? 0 : timestamp));
     }
 
     setCoins(coins : number) {

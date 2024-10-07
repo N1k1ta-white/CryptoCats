@@ -7,17 +7,17 @@
   <main>
     <div class="score">
         <div class="crypto coin">
-          <img src="http://localhost:8080/static/CryptoCoin.png" style="height: 40px;width: auto;" alt="">
+<!--          <img src="http://localhost:8080/static/CryptoCoin.png" style="height: 40px;width: auto;" alt="">-->
           <p>{{coins$ | async}}</p>
         </div>
         <div class="meme coin">
-          <img src="http://localhost:8080/static/MemeCoin.png" style="height: 25px;width: auto;" alt="">
+<!--          <img src="http://localhost:8080/static/MemeCoin.png" style="height: 25px;width: auto;" alt="">-->
           <p>{{coins$ | async}}</p>
         </div>
     </div>
     <div class="egg">
-      <img [ngClass]="{inactive : isClosed()}" ngSrc="http://localhost:8080/static/CryptoCatEgg.png" alt="" fill>
-      <button [ngClass]="{closed : isClosed(), open : !isClosed()}" [disabled]="isClosed()">{{buttonState$.value}}</button>
+<!--      <img [ngClass]="{inactive : isClosed()}" ngSrc="http://localhost:8080/static/CryptoCatEgg.png" alt="" fill>-->
+      <button [ngClass]="{closed : isClosed(), open : !isClosed()}" [disabled]="isClosed()">{{ buttonState$.value }}</button>
       <p>{{timestampToTime(time$ | async)}}</p>
     </div>
   </main>

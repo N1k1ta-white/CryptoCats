@@ -12,12 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class PartialUserResponse {
     @NotNull
-    private Long id;
-    private Long capital;
-    private Long invited_by;
-    private String initData;
-    private Long lastOpenedTime;
     private String username;
 }

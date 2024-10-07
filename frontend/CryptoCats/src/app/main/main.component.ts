@@ -36,6 +36,7 @@ export class MainComponent {
             this.time$ = dataService.getTime();
             this.buttonState$ = new BehaviorSubject(this.states[this.close]);
 
+            // TODO: extract from constructor
             this.time$.subscribe(value => {
               if (value === 0 && this.buttonState$.value != this.states[this.open]) {
                 this.buttonState$.next(this.states[this.open]);
@@ -44,13 +45,6 @@ export class MainComponent {
               }
             })
 
-  }
-
-  test(): void {
-    this.userService.test().subscribe({
-      complete: () => console.log("OK"),
-      error: () => console.log("Err")
-    })
   }
 
   logout(): void {
@@ -71,23 +65,27 @@ export class MainComponent {
     return this.buttonState$.value == this.states[this.close];
   }
 
-  // TODO: more efficient
-  protected timestampToTime(timestamp : number | null) {
-    if (timestamp == null) {
-      return "0";
+  // TODO: do it more efficient
+  protected timestampToTime(timestamp : number | null) : string {
+
+    if (timestamp == null || timestamp === 0) {
+      return "0:00:00";
     }
-    var date = new Date(timestamp * 1000);
 
-    // Hours part from the timestamp
-    var hours = date.getHours();
+    let date = new Date(timestamp * 1000);
 
-    // Minutes part from the timestamp
-    var minutes = "0" + date.getMinutes();
-
-    // Seconds part from the timestamp
-    var seconds = "0" + date.getSeconds();
+    let [hours, minutes, seconds] = [date.getHours(),
+                      date.getMinutes(),
+                      date.getSeconds(),];
 
     // Will display time in 10:30:23 format
-    return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    return hours + ':' + this.formatNum(minutes) + ':' + this.formatNum(seconds);
+  }
+
+  private formatNum(num : number) : string {
+    if (num > 10) {
+      return num.toString();
+    }
+    return "0" + num.toString();
   }
 }

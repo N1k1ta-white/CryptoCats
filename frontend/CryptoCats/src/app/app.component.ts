@@ -35,10 +35,16 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // if (sessionStorage.getItem("data") !== null && sessionStorage.getItem("name") !== null) return;
     console.log("App initzilized");
+
+    // TODO: themeService ???!!!
+    // DEPRECATED
     this.themeService.start();
+
+    // TODO: extract for more cleaner code
     this.telegramService.start().subscribe({
       next: (value : User) => {
           console.log(JSON.stringify(value));
+          console.log("Received time", value.lastOpenedTime);
           let num = (value.capital ?? 0) / 100;
           let openTime = (value.lastOpenedTime ?? Math.floor(Date.now() / 1000)) + this.recoverTime;
           this.dataService.setCoins(num);

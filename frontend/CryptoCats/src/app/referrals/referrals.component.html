@@ -1,1 +1,15 @@
-<p>referrals works!</p>
+<body>
+  <h2>Referrals</h2>
+  <h3>latest</h3>
+    @if (referrals$ | async; as referrals) {
+      @if (getTotalElements(referrals) !== 0) {
+        @for (referral of getUsers(referrals); track referral.username; let index = $index) {
+          <h4>{{index + 1}}. {{ referral.username }}</h4>
+        }
+      } @else {
+        <h4>You haven't invited anyone</h4>
+      }
+    } @else {
+      <h4>Something going wrong! :(</h4>
+    }
+</body>
