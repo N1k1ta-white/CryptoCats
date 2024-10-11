@@ -1,0 +1,8 @@
+<div [ngClass]="{active : isActive(), disabled : !isActive()}">
+  @if (isActive()) {
+    @if (cat$ | async; as cat) {
+      <img ngSrc="{{cat.img}}" fill alt="">
+      <h2>Congratulation! You've got {{cat.name}}!</h2>
+    }
+  }
+</div>

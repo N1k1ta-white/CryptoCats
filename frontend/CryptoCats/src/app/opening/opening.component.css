@@ -1,0 +1,14 @@
+.active {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: auto;
+  background: repeating-conic-gradient(
+    rgba(255, 213, 0, 0.34) 0deg 15deg,
+    hsla(0,0%,100%,0) 0deg 30deg
+  ) black;
+}
+
+.disabled {
+  display: none;
+}

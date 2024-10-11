@@ -17,7 +17,7 @@
     </div>
     <div class="egg">
 <!--      <img [ngClass]="{inactive : isClosed()}" ngSrc="http://localhost:8080/static/CryptoCatEgg.png" alt="" fill>-->
-      <button [ngClass]="{closed : isClosed(), open : !isClosed()}" [disabled]="isClosed()">{{ buttonState$.value }}</button>
+      <button [ngClass]="{closed : isClosed(), open : !isClosed()}" [disabled]="isClosed()" (click)="openEgg()">{{ buttonState$.value }}</button>
       <p>{{timestampToTime(time$ | async)}}</p>
     </div>
   </main>

@@ -7,11 +7,12 @@ import { AppComponent } from '../app.component';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { GameService } from '../services/game.service';
+import {OpeningComponent} from "../opening/opening.component";
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [RouterModule, CommonModule, NgOptimizedImage],
+  imports: [RouterModule, CommonModule, NgOptimizedImage, OpeningComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css',
 })
@@ -30,6 +31,7 @@ export class MainComponent {
             private dataService: DataService,
             private appComponent: AppComponent,
             private gameService: GameService,
+            private openComponent: OpeningComponent
           ) {
             this.name$ = dataService.getName();
             this.coins$ = dataService.getCoins();
@@ -38,9 +40,9 @@ export class MainComponent {
 
             // TODO: extract from constructor
             this.time$.subscribe(value => {
-              if (value === 0 && this.buttonState$.value != this.states[this.open]) {
+              if (value === 0 && this.isClosed()) {
                 this.buttonState$.next(this.states[this.open]);
-              } else if (value !== 0 && this.buttonState$.value != this.states[this.close]) {
+              } else if (value !== 0 && !this.isClosed()) {
                 this.buttonState$.next(this.states[this.close]);
               }
             })
@@ -55,6 +57,9 @@ export class MainComponent {
   }
 
   openEgg() {
+    this.openComponent.execute();
+
+    // TODO: erase
     this.gameService.openEgg("something").subscribe({
       complete: () => console.log("OK"),
       error: () => console.log("err"),
@@ -78,7 +83,6 @@ export class MainComponent {
                       date.getMinutes(),
                       date.getSeconds(),];
 
-    // Will display time in 10:30:23 format
     return hours + ':' + this.formatNum(minutes) + ':' + this.formatNum(seconds);
   }
 
